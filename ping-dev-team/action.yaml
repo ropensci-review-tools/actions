@@ -15,7 +15,7 @@ runs:
       shell: bash
       id: message_step
       run: |
-          MSG="${TEAM} The ${REPO_NAME} workflow has failed."
+          MSG="${TEAM} The ${{ inputs.REPO_NAME }} workflow has failed."
           echo "$MSG"
           echo "MSG=${MSG}" >> $GITHUB_ENV
       env:
