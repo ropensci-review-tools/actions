@@ -10,4 +10,4 @@ members are unable to read using default workflow tokens, so hard-coded here.
 This action is currently triggered on workflow failures in:
 
 - [ropensci-org/badges](https://github.com/ropensci-org/badges)
-- [ropensci-review-tools/dashboard](https://github.com/ropensci-review-tools/dashboard)
+- [ropensci-review-tools/dashboard](https://github.com/ropensci-review-tools/dashboard) (in [the `publish` workflow](https://github.com/ropensci-review-tools/dashboard/blob/main/.github/workflows/publish.yaml))
