@@ -26,3 +26,5 @@ runs:
       run: |
         echo 'gh issue comment ${{ inputs.ISSUE_NUM }} -b "${MSG}"'
         gh issue comment "${{ inputs.ISSUE_NUM }}" -b "${MSG}"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
