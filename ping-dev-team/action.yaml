@@ -15,9 +15,12 @@ runs:
       shell: bash
       run: |
           MSG="${TEAM} The ${REPO_NAME} workflow has failed."
+          echo "$MSG"
       env:
         TEAM: '@maelle @mpadge'
 
     - name: Comment
       shell: bash
-      run: gh issue comment $ISSUE_NUM -b "$MSG"
+      run:
+        echo "gh issue comment $ISSUE_NUM -b $MSG"
+        gh issue comment "$ISSUE_NUM" -b "$MSG"
