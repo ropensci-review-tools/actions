@@ -12,9 +12,8 @@ runs:
   using: "composite"
   steps:
     - name: Get Dev Team Members
-      description: 'Extract members of ropensci/dev-guide and prepend @ to each'
       shell: bash
-      with:
+      env:
         ORG: ropensci
       run: |
           curl -Ls \
@@ -25,7 +24,6 @@ runs:
               jq -r '[.[] | .login] | join(",@")' | awk '{print "@" $0}' > team.txt
 
     - name: Message
-      description: 'Construct the message to be posted'
       shell: bash
       run: |
           TEAM=$(cat team.txt)
