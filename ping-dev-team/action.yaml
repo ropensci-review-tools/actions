@@ -1,20 +1,27 @@
+inputs:
+  TEAM_SLUG:
+    description: 'Name of org team defining members to be pinged'
+  REPO_NAME:
+    description: 'Name of repo to be mentioned in failure message'
+  ISSUE_NUM:
+    description: 'Issue number in which message is to be posted'
+
 name: 'Ping Dev Team'
 description: 'Ping the rOpenSci dev-guide team on workflow failures'
 runs:
   using: "composite"
-  env:
-    ORG: ropensci
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   steps:
     - name: Get Dev Team Members
       description: 'Extract members of ropensci/dev-guide and prepend @ to each'
       shell: bash
+      with:
+        ORG: ropensci
       run: |
           curl -Ls \
               -H "Accept: application/vnd.github+json" \
               -H "Authorization: Bearer $GITHUB_TOKEN" \
               -H "X-GitHub-Api-Version: 2022-11-28" \
-              https://api.github.com/orgs/$ORG/teams/$TEAM_SLUG/members |
+              "https://api.github.com/orgs/$ORG/teams/'${{ inputs.TEAM_SLUG}}'/members" |
               jq -r '[.[] | .login] | join(",@")' | awk '{print "@" $0}' > team.txt
 
     - name: Message
