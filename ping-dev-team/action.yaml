@@ -17,12 +17,12 @@ runs:
       run: |
           MSG="${TEAM} The ${REPO_NAME} workflow has failed."
           echo "$MSG"
-          echo "::set-output name=MSG::$MSG"
+          echo "MSG=${MSG}" >> $GITHUB_ENV
       env:
         TEAM: '@maelle @mpadge'
 
     - name: Comment
       shell: bash
       run: |
-        echo "gh issue comment $ISSUE_NUM -b ${{ steps.message_step.outputs.MSG }}"
-        gh issue comment "$ISSUE_NUM" -b "${{ steps.message_step.outputs.MSG }}"
+        echo 'gh issue comment ${{ inputs.ISSUE_NUM }} -b "${MSG}"'
+        gh issue comment "${{ inputs.ISSUE_NUM }}" -b "${MSG}"
