@@ -4,7 +4,7 @@ runs:
   using: "composite"
   env:
     ORG: ropensci
-    GITHUB_TOKEN: ${{ secrets.MY_GH_TOKEN }}
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   steps:
     - name: Get Dev Team Members
       description: 'Extract members of ropensci/dev-guide and prepend @ to each'
