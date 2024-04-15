@@ -1,10 +1,10 @@
 inputs:
-  TEAM_SLUG:
-    description: 'Name of org team defining members to be pinged'
   REPO_NAME:
     description: 'Name of repo to be mentioned in failure message'
   ISSUE_NUM:
     description: 'Issue number in which message is to be posted'
+  TOKEN:
+    description: 'GitHub token required for cli actions'
 
 name: 'Ping Dev Team'
 description: 'Ping the rOpenSci dev-guide team on workflow failures'
@@ -27,4 +27,4 @@ runs:
         echo 'gh issue comment ${{ inputs.ISSUE_NUM }} -b "${MSG}"'
         gh issue comment "${{ inputs.ISSUE_NUM }}" -b "${MSG}"
       env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ inputs.TOKEN }}
