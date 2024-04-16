@@ -16,7 +16,7 @@ runs:
       id: message_step
       run: |
         WFURL=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-        MSG="${TEAM} The ${{ inputs.REPO_NAME }} workflow has failed; see $WFURL."
+        MSG="${TEAM} The ${{ inputs.REPO_NAME }} workflow has failed at $WFURL."
         echo "$MSG"
         echo "MSG=${MSG}" >> $GITHUB_ENV
       env:
