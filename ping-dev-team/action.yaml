@@ -20,7 +20,7 @@ runs:
         echo "$MSG"
         echo "MSG=${MSG}" >> $GITHUB_ENV
       env:
-        TEAM: '@maelle @mpadge'
+        TEAM: '@ropensci/admin'
 
     - name: Comment
       shell: bash
