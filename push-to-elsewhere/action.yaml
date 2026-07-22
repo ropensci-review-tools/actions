@@ -1,0 +1,35 @@
+inputs:
+  mirrors:
+    description: 'Newline-separated mirrors as name=url, tokens embedded in the url by the caller'
+    required: true
+  branch:
+    description: 'Branch to mirror'
+    default: 'main'
+
+name: 'Push to Elsewhere'
+description: 'Mirror a branch (with tags) to non-GitHub remotes'
+runs:
+  using: "composite"
+  steps:
+    - name: Mirror
+      if: ${{ github.event_name == 'push' && github.ref == format('refs/heads/{0}', inputs.branch) }}
+      shell: bash
+      env:
+        MIRRORS: ${{ inputs.mirrors }}
+        BRANCH: ${{ inputs.branch }}
+      run: |
+        git config --global user.name "ropensci"
+        git config --global user.email "noreply@ropensci.org"
+        if [ "$(git rev-parse --is-shallow-repository)" = "true" ]; then
+          git fetch --unshallow origin
+        fi
+        git fetch --tags origin
+        while IFS= read -r line; do
+          line="$(echo "$line" | xargs)"
+          case "$line" in ''|'#'*) continue ;; esac
+          name="${line%%=*}"
+          url="${line#*=}"
+          git remote remove "$name" 2>/dev/null || true
+          git remote add "$name" "$url"
+          git push --tags "$name" "HEAD:$BRANCH"
+        done <<< "$MIRRORS"
