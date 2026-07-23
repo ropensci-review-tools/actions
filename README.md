@@ -38,6 +38,7 @@ jobs:
     steps:
       - uses: ropensci-review-tools/actions/push-to-elsewhere@main
         with:
+          branch: main
           mirrors: |
             codeberg=https://${{ secrets.UNAME }}:${{ secrets.CODEBERG }}@codeberg.org/ropensci-review-tools/srr.git
             codefloe=https://${{ secrets.UNAME }}:${{ secrets.CODEFLOE }}@codefloe.com/ropensci-review-tools/srr.git
