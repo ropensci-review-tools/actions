@@ -11,6 +11,11 @@ description: 'Mirror a branch (with tags) to non-GitHub remotes'
 runs:
   using: "composite"
   steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
     - name: Mirror
       if: ${{ github.event_name == 'push' && github.ref == format('refs/heads/{0}', inputs.branch) }}
       shell: bash
@@ -20,9 +25,6 @@ runs:
       run: |
         git config --global user.name "ropensci"
         git config --global user.email "noreply@ropensci.org"
-        if [ "$(git rev-parse --is-shallow-repository)" = "true" ]; then
-          git fetch --unshallow origin
-        fi
         git fetch --tags origin
         while IFS= read -r line; do
           line="$(echo "$line" | xargs)"

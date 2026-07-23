@@ -36,7 +36,6 @@ jobs:
   mirror:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
       - uses: ropensci-review-tools/actions/push-to-elsewhere@main
         with:
           mirrors: |
