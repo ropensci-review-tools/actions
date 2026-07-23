@@ -16,7 +16,7 @@ runs:
       with:
         fetch-depth: 0
 
-    - name: Mirror
+    - name: Push to mirrors
       if: ${{ github.event_name == 'push' && github.ref == format('refs/heads/{0}', inputs.branch) }}
       shell: bash
       env:
