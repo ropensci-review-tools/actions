@@ -27,7 +27,7 @@ runs:
 
     - name: Checkout
       if: steps.guard.outputs.should_push == 'true'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         fetch-depth: 0
 
