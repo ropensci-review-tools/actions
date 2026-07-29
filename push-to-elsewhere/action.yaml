@@ -1,0 +1,48 @@
+inputs:
+  mirrors:
+    description: 'Newline-separated mirrors as name=url, tokens embedded in the url by the caller'
+    required: true
+  branch:
+    description: 'Branch to mirror'
+    default: 'main'
+
+name: 'Push to Elsewhere'
+description: 'Mirror a branch (with tags) to non-GitHub remotes'
+runs:
+  using: "composite"
+  steps:
+    - name: Check branch
+      id: guard
+      shell: bash
+      env:
+        EVENT_NAME: ${{ github.event_name }}
+        REF: ${{ github.ref }}
+        BRANCH: ${{ inputs.branch }}
+      run: |
+        if [ "$EVENT_NAME" = "push" ] && [ "$REF" = "refs/heads/$BRANCH" ]; then
+          echo "should_push=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "should_push=false" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Checkout
+      if: steps.guard.outputs.should_push == 'true'
+      uses: actions/checkout@v7
+      with:
+        fetch-depth: 0
+
+    - name: Push to mirrors
+      if: steps.guard.outputs.should_push == 'true'
+      shell: bash
+      env:
+        MIRRORS: ${{ inputs.mirrors }}
+      run: |
+        git config --global user.name "ropensci"
+        git config --global user.email "noreply@ropensci.org"
+        while IFS='=' read -r name url; do
+          [ -z "$name" ] && continue
+          echo "Pushing to mirror: $name"
+          git remote add "$name" "$url"
+          git push "$name" "HEAD:${{ github.ref_name }}" --tags
+          git remote remove "$name"
+        done <<< "$MIRRORS"
